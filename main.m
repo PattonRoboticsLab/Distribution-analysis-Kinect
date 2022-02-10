@@ -4,7 +4,7 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/Codes/data/P_exobicep', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/Distribution-analysis-Kinect/data/P_bicep', 'NumHeaderLines',1);
 
 %% Change reference system, filter and get time reference in seconds
 
@@ -51,23 +51,19 @@ title('Wrist movement distribution histogram')
 
 figure
 nBins=10;
-plotDust(vel_act,nBins)   % plotDust(x,nBins)
-                                      % X = rows of multidimensional values, cols are dimension
-                                      % nBins = # equally-spaced bins, for counting
+plotDust(vel_act,nBins)   
 axis equal
-xlabel('Motion in x [m]');
-ylabel('Motion in y [m]');
-zlabel('Motion in z [m]');
-title('Wrist movement distribution histogram')
+xlabel('Motion in x [m/s]');
+ylabel('Motion in y [m/s]');
+zlabel('Motion in z [m/s]');
+title('Wrist movement velocity distribution histogram')
 
 figure
 nBins=10;
-plotDust(acc_act,nBins)   % plotDust(x,nBins)
-                                      % X = rows of multidimensional values, cols are dimension
-                                      % nBins = # equally-spaced bins, for counting
+plotDust(acc_act,nBins)   
 axis equal
-xlabel('Motion in x [m]');
-ylabel('Motion in y [m]');
-zlabel('Motion in z [m]');
-title('Wrist movement distribution histogram')
+xlabel('Motion in x [m/s^2]');
+ylabel('Motion in y [m/s^2]');
+zlabel('Motion in z [m/s^2]');
+title('Wrist movement acceleration distribution histogram')
 
