@@ -15,14 +15,14 @@ hold off
 
 %% Plot activity wrist before and after filtering 
 figure
-plot(time,right_wrist(:,2),'.-')
+plot(time,right_wrist(:,3),'.-')
 hold on
 
-plot(time,right_wrist_filt(:,2),'.-')
+plot(time,right_wrist_filt(:,3),'.-')
 xlabel('Time[s]');
 ylabel('Wrist position [m]');
 legend('Original','After filtering')
-title('Raising y - wrist motion before/after filtering')
+title('Drawing circles z - wrist motion before/after filtering')
 hold off
 
 %% Plot activity wrist motion in 3D after filtering

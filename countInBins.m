@@ -65,5 +65,6 @@ end
 cmd=[cmd0 cmd1 cmd2 cmd3 cmd4];   % Put pieces together 
 eval(cmd);                        % execute the command string
 
-fprintf('done. '); drawnow; pause(.0001);
+% fprintf('\n Counts of bin %d is %d ',nBins,counts);
+fprintf('\n done. '); drawnow; pause(.0001);
 end % END function

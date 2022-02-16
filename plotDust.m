@@ -2,7 +2,7 @@
 % of datapoints in multi-dimensions, plotting capabilities in 1 to 6D
 % INITIATED:  2020-12-28 by patton from some old code
 
-function [counts,binLimits,binCenters]=plotDust(x,nBins)
+function results=plotDust(x,nBins)
 
 fprintf('\n_____\n  ~ plotDust: Distribution analysis & Plot ~  ')
 clf; drawnow, pause(.01)
@@ -15,7 +15,7 @@ fprintf('\n plotting (%d points, %d dimensions, %d Bins)...',N,nDim,nBins);
 switch nDim
   case 1      % nDim==1 
     ax=axis;
-    for j1=1:nBins, 
+    for j1=1:nBins 
         plot(zeros(size(binCenters)),binCenters(j1),'o','markerSize', ...
           1000*counts(j1)/(5*N)+1,'MarkerEdgeColor','w', 'MarkerFaceColor','r');
         text(0,binCenters(j1,1),['' num2str(counts(j1))],'fontSize',7,'Color','k');
@@ -27,11 +27,14 @@ switch nDim
 
 case 2      % nDim==2 
   plot(x(:,1),x(:,2),'b.'); hold on; ax=axis;
+  results=[0,0,0];
   for j1=1:nBins
     for j2=1:nBins
       plot(binCenters(j1,1),binCenters(j2,2),'o', ...
        'markerSize',300*counts(j1,j2)/N+.9, ...
        'MarkerEdgeColor','w', 'MarkerFaceColor','r');
+        bin_row=[binCenters(j1,1),binCenters(j2,2),1300*counts(j1,j2)/N+.9];
+        results=[results;bin_row];
      if counts(j1,j2)>0,
        text(binCenters(j1,1),binCenters(j2,2), ...
          ['' num2str(counts(j1,j2))],'fontSize',7,'Color','k');
@@ -40,17 +43,21 @@ case 2      % nDim==2
       plot([ax(1), ax(2)], binLimits(j2,2)*[1 1],'k:'); % line showing bins
     end
   end
+  disp(results)
   plot(binLimits(j1+1,1)*[1 1], [ax(3), ax(4)],'k:'); % line showing final bin
   plot([ax(1), ax(2)], binLimits(j2+1,2)*[1 1],'k:'); % line showing final bin
   plot(x(:,1),x(:,2),'b.');  % plot again
-  
+
 case 3      % nDim==3 
   plot3(x(:,1),x(:,2),x(:,3),'b.'); ax=axis; hold on;  grid on; 
+  results=[0,0,0,0];
   for j1=1:nBins
     for j2=1:nBins
       for j3=1:nBins
         plot3(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),'o', ...
           'markerSize',nBins*50*counts(j1,j2,j3)/N+1, 'MarkerEdgeColor','w', 'MarkerFaceColor','r');
+        bin_row = [binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),nBins*50*counts(j1,j2,j3)/N+1];
+        results = [results;bin_row];
         if counts(j1,j2,j3)>0,
           text(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3), ...
             ['' num2str(counts(j1,j2,j3))],'fontSize',7,'Color','k');

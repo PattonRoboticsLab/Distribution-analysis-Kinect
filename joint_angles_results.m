@@ -18,7 +18,7 @@ hold off
 
 figure
 nBins=10;
-[counts,binLimits,binCenters]=plotDust(joint_angles,nBins)   % plotDust(x,nBins)
+plotDust(joint_angles,nBins)   % plotDust(x,nBins)
                                % X = rows of multidimensional values, cols are dimension
                                % nBins = # equally-spaced bins, for counting
 axis equal
@@ -38,9 +38,9 @@ plotDust(ja_vel,nBins)   % plotDust(x,nBins)
                          % X = rows of multidimensional values, cols are dimension
                          % nBins = # equally-spaced bins, for counting
 axis equal
-xlabel('Shoulder abduction [deg/s]')
-ylabel('Shoulder flexion [deg/s]')
-zlabel('Elbow flexion [deg/s]')
+xlabel('Shoulder abduction [rad/s]')
+ylabel('Shoulder flexion [rad/s]')
+zlabel('Elbow flexion [rad/s]')
 title('Shoulder and elbow joint angles velocity distribution histogram')
 
 figure
@@ -49,9 +49,8 @@ plotDust(ja_acc,nBins)   % plotDust(x,nBins)
                          % X = rows of multidimensional values, cols are dimension
                          % nBins = # equally-spaced bins, for counting
 axis equal
-xlabel('Shoulder abduction [deg/s^2]')
-ylabel('Shoulder flexion [deg/s^2]')
-zlabel('Elbow flexion [deg/s^2]')
+xlabel('Shoulder abduction [rad/s^2]')
+ylabel('Shoulder flexion [rad/s^2]')
+zlabel('Elbow flexion [rad/s^2]')
 title('Shoulder and elbow joint angles acceleration distribution histogram')
-
 
