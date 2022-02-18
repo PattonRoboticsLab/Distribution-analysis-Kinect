@@ -43,7 +43,6 @@ case 2      % nDim==2
       plot([ax(1), ax(2)], binLimits(j2,2)*[1 1],'k:'); % line showing bins
     end
   end
-  disp(results)
   plot(binLimits(j1+1,1)*[1 1], [ax(3), ax(4)],'k:'); % line showing final bin
   plot([ax(1), ax(2)], binLimits(j2+1,2)*[1 1],'k:'); % line showing final bin
   plot(x(:,1),x(:,2),'b.');  % plot again

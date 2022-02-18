@@ -4,7 +4,11 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/Codes/data/P_exobicep', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P_circle', 'NumHeaderLines',1);
+
+%% Kinect data acquisition accuracy
+
+probability=data_acquisition_accuracy(exercise_sub1);
 
 %% Change reference system, filter and get time reference in seconds
 
@@ -29,13 +33,13 @@ axis equal
 xlabel('Motion in x [m]');
 ylabel('Motion in y [m]');
 zlabel('Motion in z [m]');
-title('Raising - wrist motion in 3D space with respect to Kinect reference system')
+title('Drawing circles - wrist motion in 3D space with respect to Kinect reference system')
 hold off
 
-%% Plot histograms
+%% Plot histograms of motion distribution
 
 figure
-nBins=10;
+nBins=4;
 plotDust(exercise_sub1_wrist,nBins)   % plotDust(x,nBins)
                                       % X = rows of multidimensional values, cols are dimension
                                       % nBins = # equally-spaced bins, for counting
@@ -45,73 +49,48 @@ ylabel('Motion in y [m]');
 zlabel('Motion in z [m]');
 title('Wrist movement distribution histogram')
 
-%% Calculate elbow-shoulder, shoulder-spine, shoulder-hip, wrist-elbow segments and shoulder (A/A and F/E) elbow (F/E) angles
+%% Plot 2D histograms of motion distribution - yz axis
+% 
+% figure
+% nBins=4;
+% results=plotDust(exercise_sub1_wrist(:,2:3),nBins)   % plotDust(x,nBins)
+%                                       % X = rows of multidimensional values, cols are dimension
+%                                       % nBins = # equally-spaced bins, for counting
+% axis equal
+% xlabel('Motion in x [m]');
+% ylabel('Motion in y [m]');
+% zlabel('Motion in z [m]');
+% title('Wrist movement distribution histogram')
 
-joint_angles=calc_jointangles(exercise_sub1_wrist,exercise_sub1_elbow,exercise_sub1_shoulder,exercise_sub1_hip,exercise_sub1_spine);
+
+%% Plot histograms of velocity and acceleration
+
+[vel_act,acc_act,smooth_act]=calc_vel_acc_smooth(exercise_sub1_wrist,time)
 
 figure
-plot(time,joint_angles)
-hold on
-
-xlabel('Time[s]');
-ylabel('Joint angles [degree]');
-title('Raising - shoulder and elbow angles in time ')
-legend('Shoulder abduction/adduction','Shoulder horizontal flexion/extension','Elbow flexion/extension')
-hold off
-
-%% Plot histograms of joint angles
-
-figure
-nBins=10;
-[counts,binLimits,binCenters]=plotDust(joint_angles,nBins)   % plotDust(x,nBins)
-                               % X = rows of multidimensional values, cols are dimension
-                               % nBins = # equally-spaced bins, for counting
+nBins=4;
+plotDust(vel_act,nBins)   
 axis equal
-xlabel('Shoulder abduction [deg]')
-ylabel('Shoulder flexion [deg]')
-zlabel('Elbow flexion [deg]')
-title('Shoulder and elbow joint angles distribution histogram - free expl')
-
-
-%% Plot histograms of angular velocity and acceleration
-
-[ja_vel, ja_acc]=joint_angle_vel_acc(joint_angles,exercise_sub1_shoulder,time);
+xlabel('Motion in x [m/s]');
+ylabel('Motion in y [m/s]');
+zlabel('Motion in z [m/s]');
+title('Wrist movement velocity distribution histogram')
 
 figure
-nBins=10;
-plotDust(ja_vel,nBins)   % plotDust(x,nBins)
-                         % X = rows of multidimensional values, cols are dimension
-                         % nBins = # equally-spaced bins, for counting
+nBins=4;
+plotDust(acc_act,nBins)   
 axis equal
-xlabel('Shoulder abduction [deg/s]')
-ylabel('Shoulder flexion [deg/s]')
-zlabel('Elbow flexion [deg/s]')
-title('Shoulder and elbow joint angles velocity distribution histogram')
+xlabel('Motion in x [m/s^2]');
+ylabel('Motion in y [m/s^2]');
+zlabel('Motion in z [m/s^2]');
+title('Wrist movement acceleration distribution histogram')
 
 figure
-nBins=10;
-plotDust(ja_acc,nBins)   % plotDust(x,nBins)
-                         % X = rows of multidimensional values, cols are dimension
-                         % nBins = # equally-spaced bins, for counting
+nBins=4;
+plotDust(smooth_act,nBins)   
 axis equal
-xlabel('Shoulder abduction [deg/s^2]')
-ylabel('Shoulder flexion [deg/s^2]')
-zlabel('Elbow flexion [deg/s^2]')
-title('Shoulder and elbow joint angles acceleration distribution histogram')
+xlabel('Motion in x [m/s^3]');
+ylabel('Motion in y [m/s^3]');
+zlabel('Motion in z [m/s^3]');
+title('Wrist movement smoothness distribution histogram')
 
-
-
-%% velocity and acceleration
-
-[vel_act,acc_act]=calc_vel_acc(exercise_sub1_wrist,time)
-
-figure
-nBins=10;
-plotDust(vel_act,nBins)   % plotDust(x,nBins)
-                                      % X = rows of multidimensional values, cols are dimension
-                                      % nBins = # equally-spaced bins, for counting
-axis equal
-xlabel('Motion in x [m]');
-ylabel('Motion in y [m]');
-zlabel('Motion in z [m]');
-title('Wrist movement distribution histogram')

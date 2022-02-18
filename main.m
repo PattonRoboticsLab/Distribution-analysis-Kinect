@@ -4,7 +4,11 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/Distribution-analysis-Kinect/data/P_exocircle', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P_circle', 'NumHeaderLines',1);
+
+%% Kinect data acquisition accuracy
+
+probability=data_acquisition_accuracy(exercise_sub1);
 
 %% Change reference system, filter and get time reference in seconds
 
@@ -35,7 +39,7 @@ hold off
 %% Plot histograms of motion distribution
 
 figure
-nBins=10;
+nBins=4;
 plotDust(exercise_sub1_wrist,nBins)   % plotDust(x,nBins)
                                       % X = rows of multidimensional values, cols are dimension
                                       % nBins = # equally-spaced bins, for counting
@@ -46,17 +50,17 @@ zlabel('Motion in z [m]');
 title('Wrist movement distribution histogram')
 
 %% Plot 2D histograms of motion distribution - yz axis
-
-figure
-nBins=10;
-plotDust(exercise_sub1_wrist(:,2:3),nBins)   % plotDust(x,nBins)
-                                      % X = rows of multidimensional values, cols are dimension
-                                      % nBins = # equally-spaced bins, for counting
-axis equal
-xlabel('Motion in x [m]');
-ylabel('Motion in y [m]');
-zlabel('Motion in z [m]');
-title('Wrist movement distribution histogram')
+% 
+% figure
+% nBins=4;
+% results=plotDust(exercise_sub1_wrist(:,2:3),nBins)   % plotDust(x,nBins)
+%                                       % X = rows of multidimensional values, cols are dimension
+%                                       % nBins = # equally-spaced bins, for counting
+% axis equal
+% xlabel('Motion in x [m]');
+% ylabel('Motion in y [m]');
+% zlabel('Motion in z [m]');
+% title('Wrist movement distribution histogram')
 
 
 %% Plot histograms of velocity and acceleration
@@ -64,7 +68,7 @@ title('Wrist movement distribution histogram')
 [vel_act,acc_act,smooth_act]=calc_vel_acc_smooth(exercise_sub1_wrist,time)
 
 figure
-nBins=10;
+nBins=4;
 plotDust(vel_act,nBins)   
 axis equal
 xlabel('Motion in x [m/s]');
@@ -73,7 +77,7 @@ zlabel('Motion in z [m/s]');
 title('Wrist movement velocity distribution histogram')
 
 figure
-nBins=10;
+nBins=4;
 plotDust(acc_act,nBins)   
 axis equal
 xlabel('Motion in x [m/s^2]');
@@ -82,7 +86,7 @@ zlabel('Motion in z [m/s^2]');
 title('Wrist movement acceleration distribution histogram')
 
 figure
-nBins=10;
+nBins=4;
 plotDust(smooth_act,nBins)   
 axis equal
 xlabel('Motion in x [m/s^3]');
