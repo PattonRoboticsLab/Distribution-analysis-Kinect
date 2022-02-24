@@ -48,20 +48,6 @@ hold off
 nBins=4;
 [pearson_corr,mov1,mov2]=find_Pearson_correlation(exercise_sub1_wrist, exercise_sub2_wrist, nBins, L1, L2);
 
-%% Kullback-Leibler Divergence
-% 
-% temp_zeros = zeros(size(mov1,1),1);
-% %mov1_Label = [mov1, temp_zeros];
-% temp_ones = ones(size(mov2,1),1);
-% %mov2_Label = [mov2, temp_ones];
-% movForEntropy = cat(1, mov1, mov2);
-% labelsForEntropy = cat(1, temp_zeros, temp_ones);
-% labelsForEntropy_log=logical(labelsForEntropy);
-% %writematrix(mov1,'mov1.csv')
-% %writematrix(mov2,'mov2.csv')
-% Z = relativeEntropy(movForEntropy,labelsForEntropy_log)
-
-
 %% Coefficient of determination
 
 %fit linear regression model
@@ -79,5 +65,20 @@ nBins=4;
 [ja_correlation,ja1,ja2]=find_Pearson_correlation(joint_angles1,joint_angles2, nBins, L1, L2);
 
 [ja_Rsquared,ja_Rsquared_adj]= find_coef_determination(joint_angles1,joint_angles2, nBins, L1, L2);
+
+
+
+%% Kullback-Leibler Divergence
+% 
+% temp_zeros = zeros(size(mov1,1),1);
+% %mov1_Label = [mov1, temp_zeros];
+% temp_ones = ones(size(mov2,1),1);
+% %mov2_Label = [mov2, temp_ones];
+% movForEntropy = cat(1, mov1, mov2);
+% labelsForEntropy = cat(1, temp_zeros, temp_ones);
+% labelsForEntropy_log=logical(labelsForEntropy);
+% %writematrix(mov1,'mov1.csv')
+% %writematrix(mov2,'mov2.csv')
+% Z = relativeEntropy(movForEntropy,labelsForEntropy_log)
 
 

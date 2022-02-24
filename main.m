@@ -4,11 +4,11 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P_circle', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/jialin_FE_4min.csv', 'NumHeaderLines',1);
 
 %% Kinect data acquisition accuracy
 
-probability=data_acquisition_accuracy(exercise_sub1);
+accuracy=data_acquisition_accuracy(exercise_sub1);
 
 %% Change reference system, filter and get time reference in seconds
 
@@ -33,7 +33,7 @@ axis equal
 xlabel('Motion in x [m]');
 ylabel('Motion in y [m]');
 zlabel('Motion in z [m]');
-title('Drawing circles - wrist motion in 3D space with respect to Kinect reference system')
+title('Free exploration - wrist motion in 3D space')
 hold off
 
 %% Plot histograms of motion distribution

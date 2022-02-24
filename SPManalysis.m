@@ -23,9 +23,37 @@ fs=1/(33*0.001);      % sample frequency (∂t≈33ms)
 [exercise_sub2_wrist,exercise_sub2_elbow,exercise_sub2_shoulder,exercise_sub2_hip,exercise_sub2_spine,right_wrist2,right_wrist2_filt,right_elbow2,right_elbow2_filt,right_shoulder2,right_shoulder2_filt,L2,time2]=newref_and_filter(exercise_sub2, b, a, theta1, theta2);
 %[exercise_sub3_wrist,exercise_sub3_elbow,exercise_sub3_shoulder,exercise_sub3_hip,exercise_sub3_spine,right_wrist3,right_wrist3_filt,right_elbow3,right_elbow3_filt,right_shoulder3,right_shoulder3_filt,L3,time3]=newref_and_filter(exercise_sub3, b, a, theta1, theta2);
 
-%% SPM 
+%% Make time as % of cycle
+
+noexo= cycle(exercise_sub1_wrist,time,L1);
+exo = cycle(exercise_sub2_wrist,time2,L2);
 
 figure
-F=spm1d.stats.ttest_paired(exercise_sub1_wrist,exercise_sub1_elbow);
-Fi=F.inference(0.05,'two_tailed',true); %inference
-Fi.plot()
+plot(noexo(:,4),noexo(:,1),'.-')
+hold on
+plot(exo(:,4),exo(:,1),'.-')
+xlabel('Cycle (%)')
+ylabel('Wrist position in x')
+title('Interpolated results')
+hold off
+
+%% SPM 
+
+data=vertcat(noexo,exo);
+A=zeros(2002,1);
+A(1002:2002,:)=1;
+
+spm = spm1d.stats.anova1(data, A);
+spmi= spm.inference(0.05);
+disp(spmi)
+
+spmi.plot();
+spmi.plot_threshold_label();
+spmi.plot_p_values();
+
+
+
+
+
+
+
