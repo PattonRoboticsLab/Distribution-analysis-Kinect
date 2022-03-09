@@ -20,4 +20,4 @@ end
 
 final_sum=sum(sum(precision_matrix));
 probability = 100*final_sum/(25*2*L); 
-fprintf('Kinect precision in collecting joint data is %d %', probability);
+fprintf('\n Kinect precision in collecting joint data is %d %', probability);

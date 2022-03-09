@@ -14,5 +14,6 @@ end
 cycledata = [data,timecycle];
 
 M4q = 0:precision:100;
-equaldata = [interp1(cycledata(:,4), cycledata(:,1:3), M4q(:)) M4q(:)];
+interp = [interp1(cycledata(:,4), cycledata(:,1:3), M4q(:)) M4q(:)];
 
+equaldata = [timecycle,];

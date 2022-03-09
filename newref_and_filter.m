@@ -1,4 +1,4 @@
-function [newref_filt_wrist,newref_filt_elbow,newref_filt_shoulder,newref_filt_hip,newref_filt_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time]=newref_and_filter(activity,b,a,theta1,theta2)
+function [newref_filt_wrist,newref_filt_elbow,newref_filt_shoulder,newref_filt_hip,newref_filt_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time,tot_time]=newref_and_filter(activity,b,a,theta1,theta2)
 
 %% Create general matrix: convert table into array and fill matrix [(n*L)x3]
 
@@ -181,11 +181,11 @@ for i=1:length(table2array(activity(:,1)))
     time(i,1)=(table2array(frames(i,1))-table2array(frames(1,1)))/1000;
 end
 
-lengths_time(1,1)=length(time(:,1));
-min_time=min(lengths_time);
+tot_time = (table2array(frames(i,1))-table2array(frames(1,1)))/1000;
+min = tot_time/60;
 
-if(length(time(:,1))==min_time)
-    X_time=time;
-end
+fprintf('\n Tot time is %d', min);
+
+
 
 

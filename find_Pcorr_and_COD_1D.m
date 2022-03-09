@@ -1,8 +1,16 @@
-function [Rsquared,Rsquared_adj,mov1_norm,mov2_norm]= find_coef_determination(JointMov1, JointMov2, nBins, L, L2)
+%% Find the coefficient of determination inter or intra personal joint movements
+% Input:
+%   - JointMov x = joint movement subject x
+%   - L = length of Jointmov
+% Output:
+%   -  mov'x'_norm = normalized JointMov x
+
+function [Rsquared,Rsquared_adj,pearson_corr,mov1_norm,mov2_norm]= find_Pcorr_and_COD(JointMov1, JointMov2, nBins, L, L2)
 
 mov_concat = cat(1, JointMov1, JointMov2);
 %[counts,binLimits,binCenters]=countInBins(combined_wrist,nBins); % fast-sort histogram
 X = mov_concat;
+
 if ~exist('minMax','var'),                    % if not passed 
     mins=min(mov_concat); ranges=range(mov_concat);             % set to points min and max
 else
@@ -103,65 +111,47 @@ eval(cmd);                        % execute the command string
 fprintf('done. '); drawnow; pause(.0001);
 
 %% Plot Joint Movement 1
+
 x = JointMov1;
-mov1 = [0,0,0,0];
-%figure
-%plot3(x(:,1),x(:,2),x(:,3),'b.'); ax=axis; hold on;  grid on; 
-for j1=1:nBins
-for j2=1:nBins
-  for j3=1:nBins
-    binrow = [binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),nBins*50*counts_mov1(j1,j2,j3)/L+1];
-    mov1 = [mov1;binrow];
-    %plot3(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),'o', ...
-      %'markerSize',nBins*50*counts_mov1(j1,j2,j3)/L+1, 'MarkerEdgeColor','w', 'MarkerFaceColor','r');
-    %disp([binCenters(j1,1), binCenters(j2,2), binCenters(j3,3)]);
-    %disp(nBins*50*counts(j1,j2,j3)/N+1);
-    %disp(counts(j1,j2,j3))
-    
-    if counts_mov1(j1,j2,j3)>0,
-      text(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3), ...
-        ['' num2str(counts_mov1(j1,j2,j3))],'fontSize',7,'Color','k');
+
+mov1 = [0,0];
+    for j1=1:nBins 
+            binrow = [binCenters(j1,1),1000*counts_mov1(j1)/(5*L)+1];
+            mov1 = [mov1;binrow];
+        % plot(zeros(size(binCenters)),binCenters(j1),'o','markerSize', ...
+        %  1000*counts(j1)/(5*N)+1,'MarkerEdgeColor','w', 'MarkerFaceColor','r');
+        % text(0,binCenters(j1,1),['' num2str(counts(j1))],'fontSize',7,'Color','k');
     end
-%     plot3(binLimits(j1,1)*[1 1], binLimits(j2,2)*[1 1], [ax(5), ax(6)],'g:'); % line showing bins
-%     plot3(binLimits(j1,1)*[1 1], [ax(3), ax(4)], binLimits(j3,3)*[1 1],'g:'); % line showing bins
-%     plot3([ax(1), ax(2)], binLimits(j2,2)*[1 1], binLimits(j3,3)*[1 1],'g:'); % line showing bins
-  end
-end
-%       drawnow; pause(.01); % update display while you go
-end
-% plot3(x(:,1),x(:,2),x(:,3),'b.'); % plot again
+%     for j1=1:nBins+1
+%       plot(ax(1:2),binLimits(j1,1)*[1 1],'g:'); % line showing bins
+%     end
+    %plot(xPos,x(:,1),'.'); % plot dots again on top
+
 
 %% Plot Joint Movement 2
 x = JointMov2;
-mov2 = [0,0,0,0];
-% figure
-% plot3(x(:,1),x(:,2),x(:,3),'b.'); ax=axis; hold on;  grid on; 
-for j1=1:nBins
-for j2=1:nBins
-  for j3=1:nBins
-    binrow = [binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),nBins*50*counts_mov2(j1,j2,j3)/L2+1];
-    mov2 = [mov2;binrow];
-%     plot3(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3),'o', ...
-%       'markerSize',nBins*50*counts_mov2(j1,j2,j3)/L2+1, 'MarkerEdgeColor','w', 'MarkerFaceColor','r');
-%     %disp([binCenters(j1,1), binCenters(j2,2), binCenters(j3,3)]);
-    %disp(nBins*50*counts(j1,j2,j3)/N+1);
-    %disp(counts(j1,j2,j3))
-    if counts_mov2(j1,j2,j3)>0,
-      text(binCenters(j1,1),binCenters(j2,2),binCenters(j3,3), ...
-        ['' num2str(counts_mov2(j1,j2,j3))],'fontSize',7,'Color','k');
+
+mov2 = [0,0];
+    for j1=1:nBins 
+            binrow = [binCenters(j1,1),1000*counts_mov2(j1)/(5*L)+1];
+            mov2 = [mov2;binrow];
+        % plot(zeros(size(binCenters)),binCenters(j1),'o','markerSize', ...
+        %  1000*counts(j1)/(5*N)+1,'MarkerEdgeColor','w', 'MarkerFaceColor','r');
+        % text(0,binCenters(j1,1),['' num2str(counts(j1))],'fontSize',7,'Color','k');
     end
-%     plot3(binLimits(j1,1)*[1 1], binLimits(j2,2)*[1 1], [ax(5), ax(6)],'g:'); % line showing bins
-%     plot3(binLimits(j1,1)*[1 1], [ax(3), ax(4)], binLimits(j3,3)*[1 1],'g:'); % line showing bins
-%     plot3([ax(1), ax(2)], binLimits(j2,2)*[1 1], binLimits(j3,3)*[1 1],'g:'); % line showing bins
-  end
-end
-%       drawnow; pause(.01); % update display while you go
-end
-% plot3(x(:,1),x(:,2),x(:,3),'b.'); % plot again
+%     for j1=1:nBins+1
+%       plot(ax(1:2),binLimits(j1,1)*[1 1],'g:'); % line showing bins
+%     end
+    %plot(xPos,x(:,1),'.'); % plot dots again on top
 
 %% Normalize data
-mov1_norm = normalize(mov1(:,4));
-mov2_norm = normalize(mov2(:,4));
+mov1_norm = normalize(mov1(:,2));
+mov2_norm = normalize(mov2(:,2));
+
+%% Calculate Pearson correlation
+
+pearson_corr = corr(mov1(:,2), mov2(:,2));
+%fprintf('\n Pearson correlation is %d', pearson_corr);
 
 %% Coefficient of determination
 
@@ -169,3 +159,6 @@ mov2_norm = normalize(mov2(:,4));
 mdl =fitlm(mov1_norm, mov2_norm);
 Rsquared = mdl.Rsquared.Ordinary;   % R-squared value
 Rsquared_adj = mdl.Rsquared.Adjusted;   % adjusted R-squared value
+%fprintf('\n Coefficient of determination is %d', Rsquared);
+
+

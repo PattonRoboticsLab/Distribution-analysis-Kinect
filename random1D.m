@@ -1,6 +1,6 @@
 %% Create random sample 
 
-function [cod_iter,cod_adj_iter,mean_cod,max_cod,min_cod]=random(activity,nBins,nFolds)
+function [cod_iter,cod_adj_iter,mean_cod,max_cod,min_cod]=random1D(activity,nBins,nFolds)
 
 cod=zeros(nFolds,1);
 cod_adj=zeros(nFolds,1);
@@ -18,7 +18,7 @@ for nsamples=100:100:size(activity,1)
         initial = randperm(size(activity,1));
         sample = activity(initial(1:nsamples), :);
         Lsample = length(sample);
-        [cod(i,:),cod_adj(i,:)]= find_Pcorr_and_COD(sample,activity, nBins, Lsample, size(activity,1));
+        [cod(i,:),cod_adj(i,:)]= find_Pcorr_and_COD_1D(sample,activity, nBins, Lsample, size(activity,1));
         itersample(i,:) = nsamples;
         timexlabel(i,:)=0.033*nsamples;
         close all

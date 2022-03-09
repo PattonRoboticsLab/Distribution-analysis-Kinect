@@ -42,21 +42,17 @@ p1=scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wri
 hold on
 p2=scatter3(exercise_sub2_wrist(:,1), exercise_sub2_wrist(:,2),exercise_sub2_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','r'); 
 axis equal
-xlabel('Horizontal plane [m]');
-ylabel('Sagittal plane [m]');
-zlabel('Frontal plane [m]');
+xlabel('x')
+ylabel('y')
+ylabel('y')
 legend([p1 p2],'With ExoNET','No ExoNET')
 title('Free exploration - wrist motion in 3D space with respect to Kinect reference system')
 hold off
 
 %% Calculate velocity, acceleration and jerk
 
-% wrist1_norm = cycle(exercise_sub1_wrist,time1,L1,precision);
-% wrist2_norm = cycle(exercise_sub2_wrist,time2,L2,precision);
-
-[vel_wrist1,acc_wrist1,jerk_wrist1]=calc_vel_acc_jerk(wrist1_norm(:,1),time1);
-[vel_wrist2,acc_wrist2,jerk_wrist2]=calc_vel_acc_jerk(wrist2_norm(:,1),time2);
-%[Rsquared,Rsquared_adj]= cod_comparison(vel_wrist1,vel_wrist2);
+[vel_wrist1,acc_wrist1,jerk_wrist1]=calc_vel_acc_jerk(exercise_sub1_wrist,time1);
+[vel_wrist2,acc_wrist2,jerk_wrist2]=calc_vel_acc_jerk(exercise_sub2_wrist,time2);
 
 %% Plot velocity, acceleration, jerk in frontal plane in time
 
@@ -102,8 +98,6 @@ title('Wrist movement jerk frontal plane in time EXO')
 
 nBins=4;
 [Rsquared,Rsquared_adj,pearson_corr,mov1,mov2]=find_Pcorr_and_COD(exercise_sub1_wrist, exercise_sub2_wrist, nBins, L1, L2);
-fprintf('\n Pearson correlation is %d', pearson_corr);
-fprintf('\n Coefficient of determination is %d', Rsquared);
 
 %% Kullback-Leibler Divergence
 % 
@@ -125,45 +119,54 @@ fprintf('\n Coefficient of determination is %d', Rsquared);
 
 [joint_angles1]=calc_jointangles(exercise_sub1_wrist,exercise_sub1_elbow,exercise_sub1_shoulder,exercise_sub1_hip,exercise_sub1_spine);
 [joint_angles2]=calc_jointangles(exercise_sub2_wrist,exercise_sub2_elbow,exercise_sub2_shoulder,exercise_sub2_hip,exercise_sub2_spine);
+% [joint_angles3]=calc_jointangles(exercise_sub3_wrist,exercise_sub3_elbow,exercise_sub3_shoulder,exercise_sub3_hip,exercise_sub3_spine);
 
 precision=0.1;
 ja1= cycle(joint_angles1,time1,L1,precision);
 ja2 = cycle(joint_angles2,time2,L2,precision);
 
+angleAA_shoulder1=ja1(:,1);        % shoulder abduction/adduction
+angleFE_shoulder1=ja1(:,2);        % shoulder flexion/extension
+angleFE_elbow1=ja1(:,3);           % elbow flexion/extension
+
+angleAA_shoulder2=ja2(:,1);        % shoulder abduction/adduction
+angleFE_shoulder2=ja2(:,2);        % shoulder flexion/extension
+angleFE_elbow2=ja2(:,3);           % elbow flexion/extension
+
 %% Correlation between vel,acc,jerk of the two
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,1))
+plot(ja1(:,4),angleAA_shoulder1)
 xlabel('Cycle [%]');
 ylabel('Adduction/abduction [degree]');
 title('Shoulder adduction/abduction angles in time ')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,1))
+plot(ja2(:,4),angleAA_shoulder2)
 xlabel('Cycle [%]');
 ylabel('Adduction/abduction [degree]');
 title('Shoulder adduction/abduction angles in time ')
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,2))
+plot(ja1(:,4),angleFE_shoulder2)
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
 title('Shoulder flexion/extension angles in time ')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,2))
+plot(ja2(:,4),angleFE_shoulder2)
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
 title('Shoulder flexion/extension angles in time ')
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,3))
+plot(ja1(:,4),angleFE_elbow1)
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
 title('Elbow flexion/extension angles in time ')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,3))
+plot(ja2(:,4),angleFE_elbow2)
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
 title('Elbow flexion/extension angles in time ')
@@ -172,5 +175,3 @@ title('Elbow flexion/extension angles in time ')
 
 nBins=4;
 [ja_Rsquared,ja_Rsquared_adj,ja_correlation,ja1,ja2]=find_Pcorr_and_COD(joint_angles1,joint_angles2, nBins, L1, L2);
-fprintf('\n Pearson correlation is %d', ja_correlation);
-fprintf('\n Coefficient of determination is %d', ja_Rsquared);

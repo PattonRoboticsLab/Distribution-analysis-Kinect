@@ -2,13 +2,17 @@
 1. data_acquisition_accuracy (see how accurate Kinect collected joint coordinates)
 2. newref_and_filter (homogeneous transformation and filtering)
 3. filtering_Results (see how it changes between and after filtering)
-4. cal_vel_acc_smooth (derivatives)
+4. cal_vel_acc_jerk (derivatives)
 5. plotMan (plotting man inside reference system)
 6. calc_jointangles
-7. calc_jointangles_vel_acc
+7. calc_jointangles_vel_acc_jerk
 8. countInBins and PlotDust --> histogram calculation
-9. coef_det_1data --> see coef determation within same set of data
 
-10. compare_results (2 data sets) 
-11. find_correlation (calculate correlation between two data) 
-12. SPManalysis 
+9. find_Pcorr_and_COD (calculate Pearson correlation and COD between two data) 
+10. random --> find randomly sets of samples and see COD with complete set
+11. random --> same but on joint angles
+
+12. compare_results (2 data sets) 
+    find_Pearson_correlation (calculate correlation between two data) 
+    find_coef_correlation
+    SPManalysis 
