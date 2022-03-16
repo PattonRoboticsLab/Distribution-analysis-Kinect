@@ -1,0 +1,140 @@
+%% CONFRONT 2 PLOTS
+
+%% CDF
+
+nBins=4;
+counts1=plotDust(exercise_sub1_wrist,nBins)
+
+nBins=4;
+counts2=plotDust(exercise_sub2_wrist,nBins)
+
+cdf1 = cumsum(counts1); % Sum histogram counts to get cumulative distribution function.
+cdf1 = cdf1 / cdf1(end); % Normalize.
+% Get data value where 80% is.
+data1GT90_ = find(cdf1>= 0.9, 1, 'first')
+
+cdf2 = cumsum(counts2); 
+cdf2 = cdf2 / cdf2(end); 
+data2GT90 = find(cdf2>= 0.8, 1, 'first')
+
+%% CONTROL
+
+figure
+scatter3(exercise_sub1_wrist(:,1),exercise_sub1_wrist(:,2), exercise_sub1_wrist(:,3),1,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
+hold on
+axis equal
+grid on
+xlabel('Horizontal plane [m]');
+ylabel('Sagittal plane [m]');
+zlabel('Frontal plane [m]');
+title('Free exploration - wrist motion in 3D space')
+
+x=exercise_sub1_wrist(:,1);
+y=exercise_sub1_wrist(:,2);
+z=exercise_sub1_wrist(:,3);
+[A,V]=convhull(x,y,z);
+trisurf(A,x,y,z);
+hold off
+
+%% 2D
+
+% x=exercise_sub1_wrist(:,2);
+% y=exercise_sub1_wrist(:,3);
+% k=boundary(x,y)
+% plot(x(k),y(k))
+% hold off
+% 
+% p_ctrl = prctile(x,90)
+% area_ctrl=polyarea(x(k),y(k))   
+% trapz_ctrl=trapz(y(k),x(k))                 % same result as polyarea
+
+%% EXO
+
+figure
+scatter3(exercise_sub2_wrist(:,1),exercise_sub2_wrist(:,2), exercise_sub2_wrist(:,3),1,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
+hold on
+axis equal
+grid on
+xlabel('Horizontal plane [m]');
+ylabel('Sagittal plane [m]');
+zlabel('Frontal plane [m]');
+title('Free exploration - wrist motion in 3D space')
+
+x=exercise_sub2_wrist(:,1);
+y=exercise_sub2_wrist(:,2);
+z=exercise_sub2_wrist(:,3);
+[TriIdx,V]=convhull(x,y,z);
+trisurf(TriIdx,x,y,z)
+
+
+%% mean and standard deviation + %% remove outliers
+
+%figure
+center_point_ctrl=mean(exercise_sub1_wrist);
+median_ctrl=median(exercise_sub1_wrist);
+std_ctrl=std(exercise_sub1_wrist);
+%boxplot(exercise_sub1_wrist,'notch','on')
+
+x=exercise_sub1_wrist(:,1);
+y=exercise_sub1_wrist(:,2);
+z=exercise_sub1_wrist(:,3);
+
+distance_x=[];
+distance_y=[];
+distance_z=[];
+
+inside_std_x=[];
+inside_std_y=[];
+inside_std_z=[];
+
+for i=1:size(exercise_sub1_wrist)
+    distance_x(i,1)=exercise_sub1_wrist(i,1)-median_ctrl(1,1); % AGGIUSTARE! RENDERLI CONIL LORO SEGNO E NON NORMA
+    distance_y(i,1)=exercise_sub1_wrist(i,2)-median_ctrl(1,2);
+    distance_z(i,1)=exercise_sub1_wrist(i,3)-median_ctrl(1,3);
+%     datax=horzcat(exercise_sub1_wrist(i,1),distance_x(i,1));
+%     datay=horzcat(exercise_sub1_wrist(i,2),distance_x(i,2));
+%     datax=horzcat(exercise_sub1_wrist(i,3),distance_x(i,3));
+%     if (abs(distance_x)<std_ctrl(1,1)) && ( ...
+%             abs(distance_y)<std_ctrl(1,2)) && ( ...
+%             abs(distance_z)<std_ctrl(1,3))
+%         inside_std_x=vertcat(inside_std_x,exercise_sub1_wrist(i,1));
+%         inside_std_y=vertcat(inside_std_y,exercise_sub1_wrist(i,2));
+%         inside_std_z=vertcat(inside_std_z,exercise_sub1_wrist(i,3));
+    %     end
+end
+
+maxcutoffx=prctile(distance_x,95);
+maxcutoffy=prctile(distance_y,95);
+maxcutoffz=prctile(distance_z,95);
+mincutoffx=prctile(distance_x,5);
+mincutoffy=prctile(distance_y,5);
+mincutoffz=prctile(distance_z,5);
+
+for i=1:size(distance_x)
+    if (abs(distance_x(i))<maxcutoffx) && (abs(distance_y(i))<maxcutoffy) && ( ...
+            abs(distance_z(i))<maxcutoffz) && (abs(distance_x(i))>micutoffx) && (abs(distance_y(i))<cutoffy) && ( ...
+            abs(distance_z(i))<cutoffz)
+        inside_std_x=vertcat(inside_std_x,distance_x(i));
+        inside_std_y=vertcat(inside_std_y,distance_y(i));
+        inside_std_z=vertcat(inside_std_z,distance_z(i));
+    end
+end
+
+inside_std=horzcat(inside_std_x,inside_std_y,inside_std_z);
+new=inside_std+median_ctrl;
+
+figure
+scatter3(exercise_sub1_wrist(:,1),exercise_sub1_wrist(:,2), exercise_sub1_wrist(:,3),1,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
+hold on
+scatter3(median_ctrl(:,1),median_ctrl(:,2),median_ctrl(:,3),5,'MarkerFaceColor','r')
+hold on
+axis equal
+grid on
+xlabel('Horizontal plane [m]');
+ylabel('Sagittal plane [m]');
+zlabel('Frontal plane [m]');
+title('Free exploration - wrist motion in 3D space')
+
+[TriIdx,V]=convhull(inside_std_x,inside_std_y,inside_std_z)
+trisurf(TriIdx,new(:,1),new(:,2),new(:,3))
+

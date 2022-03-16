@@ -5,12 +5,12 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/free_exp1_noexo.csv', 'NumHeaderLines',1);
-exercise_sub2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/free_exp1_exo.csv', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/control/free_exp3_noexo.csv', 'NumHeaderLines',1);
+exercise_sub2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/exo/free_exp3_exo.csv', 'NumHeaderLines',1);
 
 % pt1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/new/pt1_exo.csv', 'NumHeaderLines',1);
 % pt2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/new/pt2_exo.csv', 'NumHeaderLines',1);
-%exercise_sub2 = vertcat(pt1,pt2);
+% exercise_sub2 = vertcat(pt1,pt2);
 
 %% Kinect data acquisition accuracy
 
@@ -33,6 +33,8 @@ fs=1/(33*0.001);      % sample frequency (∂t≈33ms)
 
 clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 
+tot_time_max=max(tot_time1,tot_time2);
+
 %% Plot movement distribution in 3D 
 
 figure
@@ -42,6 +44,7 @@ p1=scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wri
 hold on
 p2=scatter3(exercise_sub2_wrist(:,1), exercise_sub2_wrist(:,2),exercise_sub2_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','r'); 
 axis equal
+grid off
 xlabel('Horizontal plane [m]');
 ylabel('Sagittal plane [m]');
 zlabel('Frontal plane [m]');
@@ -49,25 +52,38 @@ legend([p1 p2],'With ExoNET','No ExoNET')
 title('Free exploration - wrist motion in 3D space with respect to Kinect reference system')
 hold off
 
+
 %% Calculate velocity, acceleration and jerk
 
-% wrist1_norm = cycle(exercise_sub1_wrist,time1,L1,precision);
-% wrist2_norm = cycle(exercise_sub2_wrist,time2,L2,precision);
+[vel_wrist1,acc_wrist1,jerk_wrist1]=calc_vel_acc_jerk(exercise_sub1_wrist,time1);
+[vel_wrist2,acc_wrist2,jerk_wrist2]=calc_vel_acc_jerk(exercise_sub2_wrist,time2);
 
-[vel_wrist1,acc_wrist1,jerk_wrist1]=calc_vel_acc_jerk(wrist1_norm(:,1),time1);
-[vel_wrist2,acc_wrist2,jerk_wrist2]=calc_vel_acc_jerk(wrist2_norm(:,1),time2);
-%[Rsquared,Rsquared_adj]= cod_comparison(vel_wrist1,vel_wrist2);
+%% Plot position, velocity, acceleration, jerk in frontal plane in time (2D)
 
-%% Plot velocity, acceleration, jerk in frontal plane in time
+figure
+subplot(2,1,1);
+plot(time1(1:L1),exercise_sub1_wrist(:,1))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
+ylabel('Position [m]');
+title('Wrist movement position frontal plane in time CONTROL')
+subplot(2,1,2);
+plot(time2(1:L2),exercise_sub2_wrist(:,1))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
+ylabel('Position [m]');
+title('Wrist movement position frontal plane in time EXO')
 
 figure
 subplot(2,1,1);
 plot(time1(1:L1-1),vel_wrist1(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Velocity [m/s]');
 title('Wrist movement velocity frontal plane in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-1),vel_wrist2(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Velocity [m/s]');
 title('Wrist movement velocity frontal plane in time EXO')
@@ -75,11 +91,13 @@ title('Wrist movement velocity frontal plane in time EXO')
 figure
 subplot(2,1,1);
 plot(time1(1:L1-2),acc_wrist1(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Acceleration [m/s^2]');
 title('Wrist movement acceleration frontal plane in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-2),acc_wrist2(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Acceleration [m/s^2]');
 title('Wrist movement acceleration frontal plane in time EXO')
@@ -87,14 +105,69 @@ title('Wrist movement acceleration frontal plane in time EXO')
 figure
 subplot(2,1,1);
 plot(time1(1:L1-3),jerk_wrist1(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Jerk [m/s^3]');
 title('Wrist movement jerk frontal plane in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-3),jerk_wrist2(:,1))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Jerk [m/s^3]');
 title('Wrist movement jerk frontal plane in time EXO')
+
+%% Plot position, velocity, acceleration, jerk in 3D
+
+figure
+subplot(1,4,1);
+scatter3(exercise_sub1_wrist(:,1),exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),1,'.');
+hold on 
+scatter3(exercise_sub2_wrist(:,1),exercise_sub2_wrist(:,2),exercise_sub2_wrist(:,3),1,'.');
+hold off
+grid on
+axis equal
+xlabel('Horizontal plane');
+ylabel('Sagittal plane');
+zlabel('Frontal plane');
+title('Wrist movement position (m)');
+
+subplot(1,4,2);
+scatter3(vel_wrist1(:,1),vel_wrist1(:,2),vel_wrist1(:,3),1,'.');
+hold on 
+scatter3(vel_wrist2(:,1),vel_wrist2(:,2),vel_wrist2(:,3),1,'.');
+hold off
+grid on
+axis equal
+xlabel('Horizontal plane');
+ylabel('Sagittal plane');
+zlabel('Frontal plane');
+title('Wrist movement velocity (m/s)');
+
+subplot(1,4,3);
+scatter3(acc_wrist1(:,1),acc_wrist1(:,2),acc_wrist1(:,3),1,'.');
+hold on 
+scatter3(acc_wrist2(:,1),acc_wrist2(:,2),acc_wrist2(:,3),1,'.');
+hold off
+grid on
+axis equal
+xlabel('Horizontal plane');
+ylabel('Sagittal plane');
+zlabel('Frontal plane');
+title('Wrist movement acceleration (m/s^2)');
+
+subplot(1,4,4);
+scatter3(jerk_wrist1(:,1),jerk_wrist1(:,2),jerk_wrist1(:,3),1,'.');
+hold on 
+scatter3(jerk_wrist2(:,1),jerk_wrist2(:,2),jerk_wrist2(:,3),1,'.');
+hold off
+grid on
+axis equal
+xlabel('Horizontal plane');
+ylabel('Sagittal plane');
+zlabel('Frontal plane');
+legend('Control','Exo')
+title('Wrist movement jerk (m/s^3)');
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% COMPARISON
@@ -104,6 +177,28 @@ nBins=4;
 [Rsquared,Rsquared_adj,pearson_corr,mov1,mov2]=find_Pcorr_and_COD(exercise_sub1_wrist, exercise_sub2_wrist, nBins, L1, L2);
 fprintf('\n Pearson correlation is %d', pearson_corr);
 fprintf('\n Coefficient of determination is %d', Rsquared);
+
+%% See number of counts using CDF (cummulative density function) --> forse inutile
+
+nBins=4;
+counts1=plotDust(exercise_sub1_wrist,nBins)
+nBins=4;
+counts2=plotDust(exercise_sub2_wrist,nBins)
+
+cdf1 = cumsum(counts1); 
+cdf1 = cdf1 / cdf1(end); 
+data1GT90_ = find(cdf1>= 0.9, 1, 'first')
+
+cdf2 = cumsum(counts2); 
+cdf2 = cdf2 / cdf2(end); 
+data2GT90 = find(cdf2>= 0.8, 1, 'first')
+
+
+%% Volume and Area to define range of motion
+
+percentile=95;
+volume_ctrl=calc_coverage(exercise_sub1_wrist,percentile);
+volume_exo=calc_coverage(exercise_sub2_wrist,percentile);
 
 %% Kullback-Leibler Divergence
 % 
@@ -118,55 +213,114 @@ fprintf('\n Coefficient of determination is %d', Rsquared);
 % %writematrix(mov2,'mov2.csv')
 % Z = relativeEntropy(movForEntropy,labelsForEntropy_log)
 
+%% Turn to cycle to see COD
+% 
+% precision=0.1;
+% wrist1_norm = cycle(exercise_sub1_wrist,time1,L1,precision);
+% wrist2_norm = cycle(exercise_sub2_wrist,time2,L2,precision);
+% 
+% [Rsquared_x,Rsquared_adj_x]= cod_comparison(wrist1_norm(:,1),wrist2_norm(:,1));
+% [Rsquared_y,Rsquared_adj_y]= cod_comparison(wrist1_norm(:,2),wrist2_norm(:,2));
+% [Rsquared_z,Rsquared_adj_z]= cod_comparison(wrist1_norm(:,3),wrist2_norm(:,3));
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% JOINT ANGLES
 %% Calculate elbow-shoulder, shoulder-spine, shoulder-hip, wrist-elbow segments and shoulder (A/A and F/E) elbow (F/E) angles
 
 [joint_angles1]=calc_jointangles(exercise_sub1_wrist,exercise_sub1_elbow,exercise_sub1_shoulder,exercise_sub1_hip,exercise_sub1_spine);
 [joint_angles2]=calc_jointangles(exercise_sub2_wrist,exercise_sub2_elbow,exercise_sub2_shoulder,exercise_sub2_hip,exercise_sub2_spine);
 
-precision=0.1;
-ja1= cycle(joint_angles1,time1,L1,precision);
-ja2 = cycle(joint_angles2,time2,L2,precision);
-
-%% Correlation between vel,acc,jerk of the two
+%% Plot 3 joint angles in time - 2D
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,1))
-xlabel('Cycle [%]');
+plot(time1,joint_angles1(:,1))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
 ylabel('Adduction/abduction [degree]');
-title('Shoulder adduction/abduction angles in time ')
+title('Shoulder adduction/abduction angles in time CONTROL')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,1))
-xlabel('Cycle [%]');
+plot(time2,joint_angles2(:,1))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
 ylabel('Adduction/abduction [degree]');
-title('Shoulder adduction/abduction angles in time ')
+title('Shoulder adduction/abduction angles in time EXO')
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,2))
-xlabel('Cycle [%]');
+plot(time1,joint_angles1(:,2))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
 ylabel('Flexion/extension [degree]');
-title('Shoulder flexion/extension angles in time ')
+title('Shoulder flexion/extension angles in time CONTROL')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,2))
-xlabel('Cycle [%]');
+plot(time2,joint_angles2(:,2))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
 ylabel('Flexion/extension [degree]');
-title('Shoulder flexion/extension angles in time ')
+title('Shoulder flexion/extension angles in time EXO')
 
 figure
 subplot(2,1,1);
-plot(ja1(:,4),ja1(:,3))
+plot(time1,joint_angles1(:,3))
+xlim([0 tot_time_max])
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
-title('Elbow flexion/extension angles in time ')
+title('Elbow flexion/extension angles in time CONTROL')
 subplot(2,1,2);
-plot(ja2(:,4),ja2(:,3))
+plot(time2,joint_angles2(:,3))
+xlim([0 tot_time_max])
 xlabel('Cycle [%]');
 ylabel('Flexion/extension [degree]');
-title('Elbow flexion/extension angles in time ')
+title('Elbow flexion/extension angles in time EXO')
+
+%% Find joint angles velocity, acceleration and jerk
+
+[ja_vel1, ja_acc1,ja_jerk1]=calc_jointangles_vel_acc_jerk(joint_angles1,exercise_sub1_shoulder,time1);
+[ja_vel2, ja_acc2,ja_jerk2]=calc_jointangles_vel_acc_jerk(joint_angles2,exercise_sub2_shoulder,time2);
+
+figure
+subplot(2,1,1);
+plot(time1(1:L1-1),ja_vel1(:,2))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
+ylabel('Velocity [m/s]');
+title('Shoulder hor flexion/extension velocity in time CONTROL')
+subplot(2,1,2);
+plot(time2(1:L2-1),ja_vel2(:,2))
+xlabel('Time [s]');
+ylabel('Velocity [m/s]');
+title('Shoulder hor flexion/extension angular velocity in time EXO')
+
+figure
+subplot(2,1,1);
+plot(time1(1:L1-2),ja_acc1(:,2))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
+ylabel('Acceleration [m/s^2]');
+title('Shoulder hor flexion/extension acceleration in time CONTROL')
+subplot(2,1,2);
+plot(time2(1:L2-2),ja_acc2(:,2))
+xlabel('Time [s]');
+ylabel('Acceleration [m/s^2]');
+title('Shoulder hor flexion/extension angular acceleration in time EXO')
+
+figure
+subplot(2,1,1);
+plot(time1(1:L1-3),ja_jerk1(:,2))
+xlim([0 tot_time_max])
+xlabel('Time [s]');
+ylabel('Jerk [m/s^3]');
+title('Shoulder hor flexion/extension jerk in time CONTROL')
+subplot(2,1,2);
+plot(time2(1:L2-3),ja_jerk2(:,2))
+xlabel('Time [s]');
+ylabel('Jerk [m/s^3]');
+title('Shoulder hor flexion/extension angular jerk in time EXO')
 
 %% Correlation
 
@@ -174,3 +328,64 @@ nBins=4;
 [ja_Rsquared,ja_Rsquared_adj,ja_correlation,ja1,ja2]=find_Pcorr_and_COD(joint_angles1,joint_angles2, nBins, L1, L2);
 fprintf('\n Pearson correlation is %d', ja_correlation);
 fprintf('\n Coefficient of determination is %d', ja_Rsquared);
+
+[ja_Rsquared_sfe,ja_Rsquared_adj_sfe,ja_correlation_sfe,ja1_sfe,ja2_sfe]=find_Pcorr_and_COD(joint_angles1,joint_angles2, nBins, L1, L2);
+fprintf('\n Pearson correlation is %d', ja_correlation);
+fprintf('\n Coefficient of determination is %d', ja_Rsquared);
+
+%% Cycle
+% precision=0.1;
+% ja1= cycle(joint_angles1,time1,L1,precision);
+% ja2 = cycle(joint_angles2,time2,L2,precision);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% HOW MUCH DOES NOEXO MOVEMENT PREDICT EXO MOVEMENT? 
+%% Number of samples vs coef of determination
+
+% nBins=4;
+% nFolds=10;
+% [cod,cod_adj,mean_cod,max_cod,min_cod]=predict(exercise_sub1_wrist,exercise_sub2_wrist,nBins,nFolds);
+% 
+% %% Plot of COD with mean line
+% 
+% figure
+% scatter(cod(:,3),cod(:,1))
+% hold on
+% plot(mean_cod(:,1),mean_cod(:,2),'.-','Color','g')
+% hold on 
+% plot(mean_cod(:,1),min_cod(:,2),'.-','Color','k','LineWidth',1 )
+% hold on 
+% plot(mean_cod(:,1),max_cod(:,2),'.-','Color','k','LineWidth',1 )
+% grid on
+% hold off
+% xlabel('Time (s)');
+% ylabel('Coefficient of determination (0-100%)');
+% legend('Data','Mean line','Min/max lines')
+% title('COD of random samples vs full set of data')
+% 
+% clear fill;
+% 
+% %% Plot shaded area 
+% 
+% figure
+% plot(mean_cod(:,1),mean_cod(:,2),'.-','Color','g')
+% hold on
+% plot(mean_cod(:,1),min_cod(:,2),'.-','Color','k','LineWidth', 1)
+% hold on 
+% plot(mean_cod(:,1),max_cod(:,2),'.-','Color','k','LineWidth', 1)
+% hold on 
+% x_axis = [mean_cod(:,1); flipud(mean_cod(:,1))];
+% inBetween = [min_cod(:,2); flipud(max_cod(:,2))];
+% fill=fill(x_axis, inBetween, 'r');
+% set(fill,'facealpha',.1);
+% set(fill,'linewidth',0.1)
+% hold on
+% yline(0.99,'-','99%','LineWidth',2,'Color','r')
+% grid on
+% hold off
+% xlabel('Time (s)');
+% ylabel('Coefficient of determination (0-100%)');
+% legend('Mean values','Min/max values')
+% title('COD of random samples vs full set of data')
+% 
+% clear fill; clear x_axis; clear inBetween; clear theta2;

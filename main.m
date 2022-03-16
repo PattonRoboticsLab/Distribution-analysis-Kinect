@@ -4,7 +4,7 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/free_exp_jim.csv', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/new/FE_P_noexo.csv', 'NumHeaderLines',1);
 
 %% Kinect data acquisition accuracy
 
@@ -38,6 +38,7 @@ hold on
 % plot3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 axis equal
+axis off
 xlabel('Horizontal plane [m]');
 ylabel('Sagittal plane [m]');
 zlabel('Frontal plane [m]');
@@ -46,11 +47,11 @@ hold off
 
 %% Plot velocity, acceleration, jerk in 3D
 
-[vel_wrist,acc_wrist,jerk_wrist]=calc_vel_acc_jerk(exercise_sub1_wrist,time)
+[vel_wrist,acc_wrist,jerk_wrist]=calc_vel_acc_jerk(exercise_sub1_wrist,time);
 
 figure
 subplot(1,3,1);
-plot3(vel_wrist(:,1),vel_wrist(:,2),vel_wrist(:,3));
+scatter3(vel_wrist(:,1),vel_wrist(:,2),vel_wrist(:,3),1,'.');
 grid on
 axis equal
 xlabel('Horizontal plane');
@@ -59,7 +60,7 @@ zlabel('Frontal plane');
 title('Wrist movement velocity (m/s)');
 
 subplot(1,3,2);
-plot3(acc_wrist(:,1),acc_wrist(:,2),acc_wrist(:,3));
+scatter3(acc_wrist(:,1),acc_wrist(:,2),acc_wrist(:,3),1,'.');
 grid on
 axis equal
 xlabel('Horizontal plane');
@@ -68,7 +69,7 @@ zlabel('Frontal plane');
 title('Wrist movement acceleration (m/s^3)');
 
 subplot(1,3,3);
-plot3(jerk_wrist(:,1),jerk_wrist(:,2),jerk_wrist(:,3));
+scatter3(jerk_wrist(:,1),jerk_wrist(:,2),jerk_wrist(:,3),1,'.');
 grid on
 axis equal
 xlabel('Horizontal plane');
@@ -224,18 +225,21 @@ angleFE_elbow=joint_angles(:,3);           % elbow flexion/extension
 figure
 subplot(3,1,1);
 plot(time,angleAA_shoulder)
+xlim([0 tot_time])
 xlabel('Time[s]');
 ylabel('Adduction/abduction [degree]');
 title('Shoulder adduction/abduction angles in time ')
 
 subplot(3,1,2);
 plot(time,angleFE_shoulder)
+xlim([0 tot_time])
 xlabel('Time[s]');
 ylabel('Flexion/extension [degree]');
 title('Shoulder flexion/extension angles in time ')
 
 subplot(3,1,3);
 plot(time,angleFE_elbow)
+xlim([0 tot_time])
 xlabel('Time[s]');
 ylabel('Flexion/extension [degree]');
 title('Elbow flexion/extension angles in time ')
