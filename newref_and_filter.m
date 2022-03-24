@@ -125,9 +125,9 @@ end
 
 %% Change reference system: translation
 
-v1=-refsystem_rot2(21,1)+0.8;           % spine shoulder joint is 21
-v2=-refsystem_rot2(21,2)+0.5; 
-v3=-refsystem_rot2(21,3)+0.6;
+v1=-refsystem_rot2(21,1);           % spine shoulder joint is 21
+v2=-refsystem_rot2(21,2); 
+v3=-refsystem_rot2(21,3);
 translation=eye(4);                     % translation matrix
 translation(1,4)=v1;
 translation(2,4)=v2;

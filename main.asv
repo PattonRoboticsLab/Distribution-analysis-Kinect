@@ -111,11 +111,10 @@ plotDust(exercise_sub1_wrist,nBins)   % plotDust(x,nBins)
                                       % X = rows of multidimensional values, cols are dimension
                                       % nBins = # equally-spaced bins, for counting
 axis equal
-xlabel('Frontal plane [m]');
-ylabel('Sagittal plane [m]');
-zlabel('Trasverse plane [m]');
+xlabel('Motion in x [m]');
+ylabel('Motion in y [m]');
+zlabel('Motion in z [m]');
 title('Wrist movement distribution histogram')
-
 
 figure
 nBins=4;

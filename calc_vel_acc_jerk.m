@@ -14,7 +14,8 @@ for i=1:length(newref_filt_wrist(:,1))-3
     jerk_act(i,:)=(acc_act(i+1,:)-acc_act(i,:))/(time(i+1)-time(i));
 end
 
-% 
+
+
 % threshold = 0.1;
 % cont1=0;
 % vect1=zeros(1,length(new3_act1(:,1))-1);

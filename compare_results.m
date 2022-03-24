@@ -5,8 +5,8 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/control/free_exp3_noexo.csv', 'NumHeaderLines',1);
-exercise_sub2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/exo/free_exp3_exo.csv', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/Beatrice_CTRL/fe1.csv', 'NumHeaderLines',1);
+exercise_sub2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/dryrun/Beatrice_CTRL/fe3_ctrl.csv', 'NumHeaderLines',1);
 
 % pt1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/new/pt1_exo.csv', 'NumHeaderLines',1);
 % pt2 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/new/pt2_exo.csv', 'NumHeaderLines',1);
@@ -171,6 +171,17 @@ title('Wrist movement jerk (m/s^3)');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% COMPARISON
+
+%% Volume and Area to define range of motion
+
+percentile=95;
+group1='No exo';
+volume_ctrl=calc_coverage(exercise_sub1_wrist,percentile,group1);
+group2='Exo';
+volume_exo=calc_coverage(exercise_sub2_wrist,percentile,group2);
+
+clear group1; clear group2;
+
 %% See Pearson correlation and coefficient of determination between 2 activities
 
 nBins=4;
@@ -194,12 +205,6 @@ cdf2 = cdf2 / cdf2(end);
 data2GT90 = find(cdf2>= 0.8, 1, 'first')
 
 
-%% Volume and Area to define range of motion
-
-percentile=95;
-volume_ctrl=calc_coverage(exercise_sub1_wrist,percentile);
-volume_exo=calc_coverage(exercise_sub2_wrist,percentile);
-
 %% Kullback-Leibler Divergence
 % 
 % temp_zeros = zeros(size(mov1,1),1);
@@ -212,19 +217,6 @@ volume_exo=calc_coverage(exercise_sub2_wrist,percentile);
 % %writematrix(mov1,'mov1.csv')
 % %writematrix(mov2,'mov2.csv')
 % Z = relativeEntropy(movForEntropy,labelsForEntropy_log)
-
-%% Turn to cycle to see COD
-% 
-% precision=0.1;
-% wrist1_norm = cycle(exercise_sub1_wrist,time1,L1,precision);
-% wrist2_norm = cycle(exercise_sub2_wrist,time2,L2,precision);
-% 
-% [Rsquared_x,Rsquared_adj_x]= cod_comparison(wrist1_norm(:,1),wrist2_norm(:,1));
-% [Rsquared_y,Rsquared_adj_y]= cod_comparison(wrist1_norm(:,2),wrist2_norm(:,2));
-% [Rsquared_z,Rsquared_adj_z]= cod_comparison(wrist1_norm(:,3),wrist2_norm(:,3));
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -292,6 +284,7 @@ ylabel('Velocity [m/s]');
 title('Shoulder hor flexion/extension velocity in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-1),ja_vel2(:,2))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Velocity [m/s]');
 title('Shoulder hor flexion/extension angular velocity in time EXO')
@@ -305,6 +298,7 @@ ylabel('Acceleration [m/s^2]');
 title('Shoulder hor flexion/extension acceleration in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-2),ja_acc2(:,2))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Acceleration [m/s^2]');
 title('Shoulder hor flexion/extension angular acceleration in time EXO')
@@ -318,6 +312,7 @@ ylabel('Jerk [m/s^3]');
 title('Shoulder hor flexion/extension jerk in time CONTROL')
 subplot(2,1,2);
 plot(time2(1:L2-3),ja_jerk2(:,2))
+xlim([0 tot_time_max])
 xlabel('Time [s]');
 ylabel('Jerk [m/s^3]');
 title('Shoulder hor flexion/extension angular jerk in time EXO')

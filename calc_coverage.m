@@ -2,7 +2,7 @@
 % calculate first mean, median and standard deviation
 % remove everything ouside % percentile 
 
-function volume=calc_coverage(activity,percentile)
+function volume=calc_coverage(activity,percentile,group)
 
 % figure
 center_point=mean(activity);
@@ -55,9 +55,9 @@ grid on
 xlabel('Horizontal plane [m]');
 ylabel('Sagittal plane [m]');
 zlabel('Frontal plane [m]');
-title('Exo - percentile of wrist motion')
+title('Range of Motion of wrist',group)
 
 [area,volume]=convhull(inside_x,inside_y,inside_z);
 trimesh(area,remainingpoints(:,1),remainingpoints(:,2),remainingpoints(:,3));
-fprintf('\n Volume of ROM is %d', volume);
+fprintf('\n Volume of ROM is %d m^3', volume);
 

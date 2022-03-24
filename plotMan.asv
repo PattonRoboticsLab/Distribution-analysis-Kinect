@@ -1,26 +1,24 @@
 %% Draw reference man figure
 
-function plotMan(right_shoulder_filt)
+function plotMan(right_shoulder)
 
-if ~exist('right_shoulder_filt');  right_shoulder_filt=[0.68 0.825 0.6];  end 
-% right_shoulder_L=mean(right_shoulder(:,1));   %1.05
-% left_shoulder_L=right_shoulder_L-0.2;   %0.75
-% right_shoulder_R=right_shoulder_L+0.07; %1.12
-% left_shoulder_R=left_shoulder_L-0.7;    %0.68
-% 
-% shoulder_U=mean(right_shoulder(:,2));   %0.65
-% shoulder_B=shoulder_U-0.05;             %0.60
-% shoulder_I=mean(right_shoulder(:,3));   %0.6
-% shoulder_O=shoulder_I-0.5;              %0.1
-% 
-% xCalc = [left_shoulder_L left_shoulder_L right_shoulder_L right_shoulder_L right_shoulder_R right_shoulder_R left_shoulder_R left_shoulder_R];      % trapezoid x dimensions (bottom then top)
-% yCalc = [shoulder_B shoulder_U shoulder_U shoulder_B shoulder_B shoulder_U shoulder_U shoulder_B];          % trapezoid y dimensions
-% zCalc = [shoulder_O shoulder_O shoulder_O shoulder_O shoulder_I shoulder_I shoulder_I shoulder_I];              % trapezoid z dimensions
+% if ~exist('right_shoulder_filt');  right_shoulder_filt=[0.68 0.825 0.6];  end 
+right_shoulder_L=mean(right_shoulder(:,1));   %1.05
+left_shoulder_L=right_shoulder_L-0.2;   %0.75
+right_shoulder_R=right_shoulder_L+0.07; %1.12
+left_shoulder_R=left_shoulder_L-0.7;    %0.68
 
+shoulder_U=mean(right_shoulder(:,2));   %0.65
+shoulder_B=right_shoulder-0.05;         %0.60
 
-xCalc = [0.75 0.75 1.05 1.05 1.12 1.12 0.68 0.68];      % trapezoid x dimensions (bottom then top)
+xCalc = [left_shoulder_L left_shoulder_L right_shoulder_L right_shoulder_L right_shoulder_R right_shoulder_R left_shoulder_R left_shoulder_R];      % trapezoid x dimensions (bottom then top)
 yCalc = [0.6 0.65 0.65 0.6 0.6 0.65 0.65 0.6];          % trapezoid y dimensions
 zCalc = [0.1 0.1 0.1 0.1 0.6 0.6 0.6 0.6];              % trapezoid z dimensions
+
+% 
+% xCalc = [0.75 0.75 1.05 1.05 1.12 1.12 0.68 0.68];      % trapezoid x dimensions (bottom then top)
+% yCalc = [0.6 0.65 0.65 0.6 0.6 0.65 0.65 0.6];          % trapezoid y dimensions
+% zCalc = [0.1 0.1 0.1 0.1 0.6 0.6 0.6 0.6];              % trapezoid z dimensions
 
 %bottom
 fill3(xCalc([1 2 3 4]), yCalc([1 2 3 4]), zCalc([1 2 3 4]),1,'FaceAlpha',0.1); hold on

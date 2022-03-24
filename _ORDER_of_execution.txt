@@ -1,18 +1,28 @@
+ANALYZE SINGLE DATASET:
+
 0. main (using 1 data set)
 1. data_acquisition_accuracy (see how accurate Kinect collected joint coordinates)
 2. newref_and_filter (homogeneous transformation and filtering)
-3. filtering_Results (see how it changes between and after filtering)
-4. cal_vel_acc_jerk (derivatives)
-5. plotMan (plotting man inside reference system)
-6. calc_jointangles
-7. calc_jointangles_vel_acc_jerk
-8. countInBins and PlotDust --> histogram calculation
+3. filtering_Results (see how it changes between before and after filtering)
+4. plotMan (plotting man inside reference system)
+5. cal_vel_acc_jerk (derivatives) + PLOT in 2D (in time) and 3D (in space)
+7. countInBins and PlotDust --> histogram calculation
+8. calc_coverage --> see ROM
 
-9. find_Pcorr_and_COD (calculate Pearson correlation and COD between two data) 
-10. random --> find randomly sets of samples and see COD with complete set
-11. random --> same but on joint angles
+Are the data we are using enough to predict the entire movement of a subject?
+9. find_Pcorr_and_COD (calculate Pearson correlation and COD between two data using histogram results) 
+10. random (find randomly sets of samples and see COD with complete set) + PLOT
 
-12. compare_results (2 data sets) 
+JOINT ANGELS
+11. calc_jointangles + PLOT 2D (in time) and 3D (in space)
+12. calc_jointangles_vel_acc_jerk + PLOT 2D (in time) and 3D (in space)
+12. random1D --> same but on joint angles + PLOT
+
+
+COMPARE TWO DATASETS:
+
+13. compare_results (2 data sets) - same as points 0-5
+    calc_coverage --> see different volumes
     find_Pearson_correlation (calculate correlation between two data) 
     find_coef_correlation
-    SPManalysis 
+     

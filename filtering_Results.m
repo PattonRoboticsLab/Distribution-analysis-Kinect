@@ -15,15 +15,19 @@ hold off
 
 %% Plot activity wrist before and after filtering 
 figure
-plot(time,right_wrist(:,3),'.-')
+plot(time,right_wrist(:,1),'.-')
 hold on
 
-plot(time,right_wrist_filt(:,3),'.-')
+plot(time,right_wrist_filt(:,1),'.-')
+xlim([110 140])
 xlabel('Time[s]');
 ylabel('Wrist position [m]');
 legend('Original','After filtering')
-title('Drawing circles z - wrist motion before/after filtering')
+title('Free exploration - wrist motion before/after filtering in frontal plane')
 hold off
+
+h=figure(1);
+saveas(h,'filtresult','png')
 
 %% Plot activity wrist motion in 3D after filtering
 figure
@@ -32,9 +36,9 @@ hold on
 % plot3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 axis equal
-xlabel('x');
-ylabel('y');
-zlabel('z');
+xlabel('Frontal plane');
+ylabel('Sagittal plane');
+zlabel('Trasverse plane');
 legend('Wrist motion')
 title('Raising - wrist motion in 3D space with respect to Kinect reference system')
 hold off

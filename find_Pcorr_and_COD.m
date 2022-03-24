@@ -184,3 +184,4 @@ mdl =fitlm(mov1_norm, mov2_norm);
 Rsquared = mdl.Rsquared.Ordinary;   % R-squared value
 Rsquared_adj = mdl.Rsquared.Adjusted;   % adjusted R-squared value
 %fprintf('\n Coefficient of determination is %d', Rsquared);
+
