@@ -21,7 +21,7 @@ JOINT ANGELS
 
 COMPARE TWO DATASETS:
 
-13. compare_results (2 data sets) - same as points 0-5
+13. compare_ExoNET_onoff or compare_prepost_therapy - same as points 0-5
     calc_coverage --> see different volumes
     find_Pearson_correlation (calculate correlation between two data) 
     find_coef_correlation

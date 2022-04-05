@@ -4,7 +4,7 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/free_exp_jim.csv', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration1.csv', 'NumHeaderLines',1);
 
 %% Kinect data acquisition accuracy
 
@@ -33,7 +33,7 @@ clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 
 %% Plot activity wrist motion in 3D after filtering
 figure
-plotMan(right_shoulder_filt); 
+plotMan2(right_shoulder_filt); 
 hold on
 % plot3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
@@ -107,14 +107,15 @@ title('Wrist movement jerk frontal plane in time')
 
 figure
 nBins=4;
-plotDust(exercise_sub1_wrist,nBins)   % plotDust(x,nBins)
+plotDust(exercise_sub2_wrist,nBins)   % plotDust(x,nBins)
                                       % X = rows of multidimensional values, cols are dimension
                                       % nBins = # equally-spaced bins, for counting
 axis equal
-xlabel('Motion in x [m]');
-ylabel('Motion in y [m]');
-zlabel('Motion in z [m]');
+xlabel('Frontal plane [m]');
+ylabel('Sagittal plane [m]');
+zlabel('Trasverse plane [m]');
 title('Wrist movement distribution histogram')
+
 
 figure
 nBins=4;
@@ -145,7 +146,7 @@ title('Wrist movement jerk distribution histogram')
 
 %% Calculate coverage
 
-percentile=95;
+percentile=90;
 group='Free exploration distribution'; % name the activity considered
 volume_distribution=calc_coverage(exercise_sub1_wrist,percentile,group);
 
@@ -168,7 +169,7 @@ volume_velocity=calc_coverage(vel_wrist,percentile,group);
 %%  Number of samples vs coef of determination
 
 nBins=4;
-nFolds=10;
+nFolds=100;
 [cod,cod_adj,mean_cod,max_cod,min_cod]=random(exercise_sub1_wrist,nBins,nFolds);
 
 %% Plot of COD with mean line

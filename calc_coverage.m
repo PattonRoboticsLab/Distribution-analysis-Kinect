@@ -52,9 +52,9 @@ scatter3(mediana(:,1),mediana(:,2),mediana(:,3),5,'MarkerFaceColor','r');
 hold on
 axis equal
 grid on
-xlabel('Horizontal plane [m]');
+xlabel('Frontal plane [m]');
 ylabel('Sagittal plane [m]');
-zlabel('Frontal plane [m]');
+zlabel('Trasverse plane [m]');
 title('Range of Motion of wrist',group)
 
 [area,volume]=convhull(inside_x,inside_y,inside_z);
