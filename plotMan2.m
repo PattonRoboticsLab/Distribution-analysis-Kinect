@@ -2,7 +2,7 @@
 
 function plotMan2(right_shoulder_filt)
 
-if ~exist('right_shoulder_filt');  right_shoulder_filt=[0.68 0.825 0.6];  end 
+%if ~exist('right_shoulder_filt');  right_shoulder_filt=[0.68 0.825 0.6];  end 
 % right_shoulder_L=mean(right_shoulder(:,1));   %1.05
 % left_shoulder_L=right_shoulder_L-0.2;   %0.75
 % right_shoulder_R=right_shoulder_L+0.07; %1.12

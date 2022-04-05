@@ -1,4 +1,4 @@
-function [newref_filt_wrist,newref_filt_elbow,newref_filt_shoulder,newref_filt_hip,newref_filt_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time,tot_time]=newref_and_filter(activity,b,a,theta1,theta2)
+function [newref_filt_wrist,newref_filt_elbow,newref_filt_shoulder,newref_filt_hip,newref_filt_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time,tot_time]=newref_filt_Right(activity,b,a,theta1,theta2)
 
 %% Create general matrix: convert table into array and fill matrix [(n*L)x3]
 

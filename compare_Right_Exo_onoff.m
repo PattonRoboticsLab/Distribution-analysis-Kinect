@@ -1,4 +1,4 @@
-%% Compare with and without ExoNET - wrist in 3D
+%% Compare with and without ExoNET - right wrist in 3D
 
 
 clear all
@@ -24,8 +24,8 @@ fc=6;           % cut off frequency
 fs=1/(33*0.001);      % sample frequency (∂t≈33ms)
 [b,a] = butter(5,fc/(fs/2), 'low');     % 5th order
 
-[noExo_wrist,noExo_elbow,noExo_shoulder,noExo_hip,noExo_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L1,time1,tot_time1]=newref_and_filter(noExo,b,a,theta1,theta2);
-[withExo_wrist,withExo_elbow,withExo_shoulder,withExo_hip,withExo_spine,right_wrist2,right_wrist2_filt,right_elbow2,right_elbow2_filt,right_shoulder2,right_shoulder2_filt,L2,time2,tot_time2]=newref_and_filter(withExo, b, a, theta1, theta2);
+[noExo_wrist,noExo_elbow,noExo_shoulder,noExo_hip,noExo_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L1,time1,tot_time1]=newref_filt_Right(noExo,b,a,theta1,theta2);
+[withExo_wrist,withExo_elbow,withExo_shoulder,withExo_hip,withExo_spine,right_wrist2,right_wrist2_filt,right_elbow2,right_elbow2_filt,right_shoulder2,right_shoulder2_filt,L2,time2,tot_time2]=newref_filt_Right(withExo, b, a, theta1, theta2);
 
 clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 
@@ -50,7 +50,6 @@ zlabel('Trasverse plane [m]');
 legend([p1 p2],'No ExoNET','With ExoNET')
 title('Free exploration - wrist motion in 3D space with respect to Kinect reference system')
 hold off
-
 
 %% Calculate velocity, acceleration and jerk
 
@@ -186,7 +185,7 @@ title('Wrist movement distribution histogram')
 
 %% Volume and Area to define range of motion
 
-percentile=90;
+percentile=95;
 group1='No exo';
 volume_ctrl=calc_coverage(noExo_wrist,percentile,group1);
 group2='Exo';
