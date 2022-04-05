@@ -34,7 +34,7 @@ tot_time_max=max(tot_time2,tot_time3);
 %% Plot movement distribution in 3D 
 
 figure
-plotMan2(right_shoulder2_filt); 
+plotManR(right_shoulder2_filt); 
 hold on
 p1=scatter3(withExo_wrist(:,1), withExo_wrist(:,2),withExo_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','r'); 
 hold on

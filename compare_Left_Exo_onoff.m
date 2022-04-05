@@ -36,14 +36,14 @@ clear tot1; clear tot2;
 %% Plot movement distribution in 3D 
 
 figure
-plotMan2(left_shoulder_filt); 
+plotManL(left_shoulder_filt); 
 hold on
 p1=scatter3(noExo_wrist(:,1), noExo_wrist(:,2),noExo_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','b');
 hold on
 p2=scatter3(withExo_wrist(:,1), withExo_wrist(:,2),withExo_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','r'); 
 axis equal
-grid off
-axis off
+% grid off
+% axis off
 xlabel('Frontal plane [m]');
 ylabel('Sagittal plane [m]');
 zlabel('Trasverse plane [m]');
