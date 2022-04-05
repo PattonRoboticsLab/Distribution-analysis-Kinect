@@ -5,8 +5,8 @@ clear all
 close all
 clc
 
-withExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration2.csv', 'NumHeaderLines',1);
-withExopost = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration3.csv', 'NumHeaderLines',1);
+withExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session3/P01_FreeExp3.2.csv', 'NumHeaderLines',1);
+withExopost = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session3/P01_FreeExp3.3.csv', 'NumHeaderLines',1);
 
 %% Kinect data acquisition accuracy
 
@@ -24,8 +24,8 @@ fc=6;           % cut off frequency
 fs=1/(33*0.001);      % sample frequency (∂t≈33ms)
 [b,a] = butter(5,fc/(fs/2), 'low');     % 5th order
 
-[withExo_wrist,withExo_elbow,withExo_shoulder,withExo_hip,withExo_spine,right_wrist2,right_wrist2_filt,right_elbow2,right_elbow2_filt,right_shoulder2,right_shoulder2_filt,L2,time2,tot_time2]=newref_and_filter(withExo, b, a, theta1, theta2);
-[withExopost_wrist,withExopost_elbow,withExopost_shoulder,withExopost_hip,withExopost_spine,right_wrist3,right_wrist3_filt,right_elbow3,right_elbow3_filt,right_shoulder3,right_shoulder3_filt,L3,time3,tot_time3]=newref_and_filter(withExopost, b, a, theta1, theta2);
+[withExo_wrist,withExo_elbow,withExo_shoulder,withExo_hip,withExo_spine,right_wrist2,right_wrist2_filt,right_elbow2,right_elbow2_filt,right_shoulder2,right_shoulder2_filt,L2,time2,tot_time2]=newref_filt_Right(withExo, b, a, theta1, theta2);
+[withExopost_wrist,withExopost_elbow,withExopost_shoulder,withExopost_hip,withExopost_spine,right_wrist3,right_wrist3_filt,right_elbow3,right_elbow3_filt,right_shoulder3,right_shoulder3_filt,L3,time3,tot_time3]=newref_filt_Right(withExopost, b, a, theta1, theta2);
 
 clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 

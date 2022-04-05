@@ -5,8 +5,8 @@ clear all
 close all
 clc
 
-noExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration1.csv', 'NumHeaderLines',1);
-withExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration2.csv', 'NumHeaderLines',1);
+noExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session3/P01_FreeExp3.1.csv', 'NumHeaderLines',1);
+withExo = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session3/P01_FreeExp3.2.csv', 'NumHeaderLines',1);
 
 %% Kinect data acquisition accuracy
 
@@ -185,7 +185,7 @@ title('Wrist movement distribution histogram')
 
 %% Volume and Area to define range of motion
 
-percentile=95;
+percentile=90;
 group1='No exo';
 volume_ctrl=calc_coverage(noExo_wrist,percentile,group1);
 group2='Exo';
