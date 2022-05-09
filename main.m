@@ -4,7 +4,9 @@ clear all
 close all
 clc
 
-exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/Session2/FreeExploration1.csv', 'NumHeaderLines',1);
+%exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/free_exp_jim.csv', 'NumHeaderLines',1);
+exercise_sub1 = readtable('/Users/jialinhe1/Desktop/Tesi/Kinect/data/P1/PostEval/P01_FreeExp_posteval.csv', 'NumHeaderLines',1);
+
 
 %% Kinect data acquisition accuracy
 
@@ -21,7 +23,7 @@ fc=6;           % cut off frequency
 fs=1/(33*0.001);      % sample frequency (∂t≈33ms)
 [b,a] = butter(5,fc/(fs/2), 'low');     % 5th order
 
-[exercise_sub1_wrist,exercise_sub1_elbow,exercise_sub1_shoulder,exercise_sub1_hip,exercise_sub1_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time,tot_time]=newref_and_filter(exercise_sub1,b,a,theta1,theta2);
+[exercise_sub1_wrist,exercise_sub1_elbow,exercise_sub1_shoulder,exercise_sub1_hip,exercise_sub1_spine,right_wrist,right_wrist_filt,right_elbow,right_elbow_filt,right_shoulder,right_shoulder_filt,L,time,tot_time]=newref_filt_Right(exercise_sub1,b,a,theta1,theta2);
 
 clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 
@@ -33,7 +35,7 @@ clear a; clear b; clear theta1; clear theta2; clear fc; clear fs;
 
 %% Plot activity wrist motion in 3D after filtering
 figure
-plotMan2(right_shoulder_filt); 
+plotManR(right_shoulder_filt); 
 hold on
 % plot3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),'MarkerEdgeColor','k','MarkerFaceColor','b'); 
 scatter3(exercise_sub1_wrist(:,1), exercise_sub1_wrist(:,2),exercise_sub1_wrist(:,3),2,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
@@ -107,7 +109,7 @@ title('Wrist movement jerk frontal plane in time')
 
 figure
 nBins=4;
-plotDust(exercise_sub2_wrist,nBins)   % plotDust(x,nBins)
+plotDust(exercise_sub1_wrist,nBins)   % plotDust(x,nBins)
                                       % X = rows of multidimensional values, cols are dimension
                                       % nBins = # equally-spaced bins, for counting
 axis equal
@@ -146,7 +148,7 @@ title('Wrist movement jerk distribution histogram')
 
 %% Calculate coverage
 
-percentile=90;
+percentile=95;
 group='Free exploration distribution'; % name the activity considered
 volume_distribution=calc_coverage(exercise_sub1_wrist,percentile,group);
 
@@ -369,4 +371,7 @@ title('COD of random samples vs full set of data')
 
 clear fill; clear x_axis; clear inBetween;
 
-
+%% Coverage
+percentile=95;
+group1='No ExoNET';
+volume_ja=calc_coverage(joint_angles,percentile,group1)

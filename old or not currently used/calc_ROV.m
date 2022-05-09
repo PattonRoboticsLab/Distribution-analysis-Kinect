@@ -2,7 +2,7 @@
 % calculate first mean, median and standard deviation
 % remove everything ouside % percentile 
 
-function volume=calc_coverage(activity,percentile,group)
+function rangevel=calc_ROV(activity,percentile,group)
 
 % figure
 center_point=mean(activity);
@@ -45,17 +45,9 @@ end
 inside_std=horzcat(inside_x,inside_y,inside_z);
 remainingpoints=inside_std+mediana;
 
-figure
-scatter3(activity(:,1),activity(:,2), activity(:,3),1,'MarkerEdgeColor','k','MarkerFaceColor','b'); 
-hold on
-scatter3(mediana(:,1),mediana(:,2),mediana(:,3),5,'MarkerFaceColor','r');
-hold on
-axis equal
-grid on
-xlabel('Frontal plane [m]');
-ylabel('Sagittal plane [m]');
-zlabel('Trasverse plane [m]');
-title('Coverage ROM of wrist',group)
+max_vel=max(remainingpoints);
+min_vel=min(remainingpoints);
+rangevel=(max_vel-min_vel);
 
 [area,volume]=convhull(inside_x,inside_y,inside_z);
 trimesh(area,remainingpoints(:,1),remainingpoints(:,2),remainingpoints(:,3));

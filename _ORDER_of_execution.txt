@@ -21,7 +21,7 @@ JOINT ANGELS
 
 COMPARE TWO DATASETS:
 
-13. compare_Right_Exo_onoff or compare_Right_prepost_therapy - same as points 0-5
+13. confrontROM_Right or confrontROM_Left - same as points 0-5
     calc_coverage --> see different volumes
     find_Pearson_correlation (calculate correlation between two data) 
     find_coef_correlation

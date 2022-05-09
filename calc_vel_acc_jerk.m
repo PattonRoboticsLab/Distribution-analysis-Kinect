@@ -3,15 +3,15 @@
 function [vel_act,acc_act,jerk_act]=calc_vel_acc_jerk(newref_filt_wrist,time)
 
 for i=1:length(newref_filt_wrist(:,1))-1
-    vel_act(i,:)=(newref_filt_wrist(i+1,:)-newref_filt_wrist(i,:))/(time(i+1)-time(i));
+    vel_act(i,:)=abs((newref_filt_wrist(i+1,:)-newref_filt_wrist(i,:))/(time(i+1)-time(i)));
 end
 
 for i=1:length(newref_filt_wrist(:,1))-2
-    acc_act(i,:)=(vel_act(i+1,:)-vel_act(i,:))/(time(i+1)-time(i));
+    acc_act(i,:)=abs((vel_act(i+1,:)-vel_act(i,:))/(time(i+1)-time(i)));
 end
 
 for i=1:length(newref_filt_wrist(:,1))-3
-    jerk_act(i,:)=(acc_act(i+1,:)-acc_act(i,:))/(time(i+1)-time(i));
+    jerk_act(i,:)=abs((acc_act(i+1,:)-acc_act(i,:))/(time(i+1)-time(i)));
 end
 
 
